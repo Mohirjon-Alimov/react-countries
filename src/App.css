@@ -1,38 +1,65 @@
-.App {
-  text-align: center;
+.heading {
+  max-width: 1440px;
+  padding: 25px 80px;
+  background-color: #fff;
 }
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+.d-mode {
+  padding-left: 33px;
 }
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.d-mode::before {
+  content:  "";
+  width: 20px;
+  height: 20px;
+  position: absolute;
+  background-image: url(./assets/img/darkMode.svg);
+  background-repeat: no-repeat;
+  left: 6px;
 }
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.card {
+  width: 260px;
+  margin: 35px 15px;
+  border-radius: 6px;
+  position: relative;
+  background: #FFFFFF;
+  box-shadow: 0px 0px 7px 2px rgba(0, 0, 0, 0.0294384);
+  border-radius: 5px;
 }
-
-.App-link {
-  color: #61dafb;
+.card-list {
+  display: flex; 
+  justify-content: space-around;
+  flex-wrap: wrap;
 }
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.innerCard {
+  padding-left: 25px;
+  padding-top: 25px;
+}
+.searching {
+  margin-top: 48px;
+  position: relative;
+}
+.searchInput {
+  width: 480px;
+  height: 56px;
+  margin-left: 80px;
+  padding-left: 75px;
+}
+.select {
+  width: 200px;
+  height: 56px;
+  padding: 0 25px;
+}
+.select, .searchInput {
+  border: 0px solid #fff;
+  box-shadow: 0px 2px 9px rgba(0, 0, 0, 0.0532439);
+  border-radius: 5px;
+}
+.searching::before {
+  content: " ";
+  width: 18px;
+  height: 18px;
+  position: absolute;
+  background-image: url(./assets/img/search.svg);
+  background-repeat: no-repeat;
+  z-index: 9;
+  left: 112px;
 }
