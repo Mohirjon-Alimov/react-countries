@@ -4,10 +4,6 @@ let Header = () => {
       <p className="h3">Where in the world?</p>
       <button className="d-mode btn position-relative">Dark Mode</button>
     </div>
-
-    
-
-
   )
 }
 export default Header;
