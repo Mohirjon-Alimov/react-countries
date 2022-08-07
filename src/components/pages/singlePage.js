@@ -24,7 +24,7 @@ export const SinglePage = ()=> {
       isError: true,
       data: {}
     }))
-  }, [])
+  }, [name])
   
   const navigate = useNavigate()
   return(
@@ -57,7 +57,7 @@ export const SinglePage = ()=> {
 
                     <p className="fw-bold">Top Level Domain: <span className="fw-normal">{c.tld}</span></p>
                     <p className="fw-bold">Currencies: <span className="fw-normal">{c.currencies[Object.keys(c.currencies)[0]].name}</span></p>
-                    <p className="fw-bold">Languages: <span className="fw-normal">{c.languages[Object.keys(c.languages)[0, 1]]}</span></p>
+                    <p className="fw-bold">Languages: <span className="fw-normal">{c.languages[Object.keys(c.languages)[0]]}</span></p>
 
                   </div>
                 </div>
