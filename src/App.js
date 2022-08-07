@@ -1,92 +1,94 @@
 import './App.css';
-import Select from 'react-select';
 import Header from './components/header';
-import {Card} from './components/cards';
-import {useEffect,  useState } from 'react';
+import {useEffect, useState } from 'react';
 import React from 'react';
-import {ReactComponent as PaintIcon} from './assets/img/image.svg'
+import Country from './components/pages/homePage';
+import  {SinglePage} from './components/pages/singlePage';
+import { Search } from './components/search';
+import { Select } from './components/Select';
+import { Routes, Route} from 'react-router-dom'; 
 
 function App() {
-
-  const [countries, setCountries] = useState([])
+  const [select, setSelect] = useState()
+  const [value, setValue] = useState();
+  const [countries, setCountries] = useState({
+    isLoading: true,
+    isError: false,
+    data: {}
+  })
   
   useEffect(() =>{
-    fetch("https://restcountries.com/v3.1/all")
-    .then((res) => res.json()).then((data)=> {setCountries(data)})
-    .catch((err) => {console.log(err)})
-  }, [])
-
-
-  let catchInpValue = (evt) => {
-    // if(evt.code === "Enter"){
-      try{
-        fetch(`https://restcountries.com/v3.1/name/${evt.target.value}`)
-        .then((res) => res.json()).then((data)=> {setCountries(data)})
-        .catch((err) => {console.log(err)})
-
-        if(evt.code === "Enter"){
-          evt.target.value = null;
-        }
+    if (value?.length) {
+      fetch(`https://restcountries.com/v3.1/name/${value}`)
+      .then((res) => res.json()).then((data)=> setCountries({
+      isLoading: false,
+      isError: false,
+      data: data
+      }))
+      .catch((err) => console.log(), setCountries({
+        isLoading: false,
+        isError: true,
+        data: {},
         
-      }catch(err){
-        console.log(err);
-      }
-    // }
-  
-  }
-
-  const options = [
-    { value: 'africa', label: 'Africa' },
-    { value: 'america', label: 'America' },
-    { value: 'asia', label: 'Asia' },
-    { value: 'europe', label: 'Europe' },
-    { value: 'oceania', label: 'Oceania' },
-  ];
-
-  let [currentValue, setCurrentValue] = useState('');
-
-  let getValue = () =>{
-    console.log(setCurrentValue());
-    return currentValue ? options.find(c => c.value === currentValue) : ' '
-  }
-  let onChange = (newValue) =>{
-    try{
-      fetch(`https://restcountries.com/v3.1/region/${newValue.value}`)
-      .then((res) => res.json()).then((data)=> {setCountries(data)})
-      .catch((err) => {console.log(err)})
-
-    }catch(err){
-      console.log(err);
+      }))
+      
+    }else if(select?.length && select !== 'all'){
+      fetch(`https://restcountries.com/v3.1/region/${select}`)
+        .then((res) => res.json())
+        .then((data)=> setCountries({
+        isLoading: false,
+        isError: false,
+        data: data
+        }))
+        .catch((err) => setCountries({
+          isLoading: false,
+          isError: true,
+          data: {}
+        }))
+        
     }
-    return setCurrentValue(newValue.value);
-    
-  }
+    else {
+      fetch("https://restcountries.com/v3.1/all")
+      .then((res) => res.json()).then((data)=> setCountries({
+        isLoading: false,
+        isError: false,
+        data: data
+      }))
+      .catch((err) => {
+        // console.log(err);
+        setCountries({
+        isLoading: false,
+        isError: true,
+        data: {}
+      })})
+      
+    }
+  }, [value, select])
 
   return (
     <div className="container-fluid">
 
       <Header />
-
-      <div className="searching container-md d-sm-flex justify-content-between align-items-center">
-
-        <div className="searchBox d-flex align-items-center">
-          <input onChange={catchInpValue} className="searchInput position-relative" type="text" placeholder="Search for a country…"></input>
-        </div>
-
-      <Select className='selectInp  mt-sm-0 mt-4' options={options} getValue={getValue} onChange={onChange}/>
+      <Routes>
+        <Route path="/" element={
+          <>
+            <div className="searching container-md d-sm-flex justify-content-between align-items-center">
+              <Search setValue={setValue} /> 
+              <Select setSelect={setSelect} />
+            </div>
+            <Country countries={countries} />
+          </>
+        } />
+        <Route path="/country/:name" element={<SinglePage />}/>
+      </Routes>
       
-    </div>
-      <ul className='card-list'>
       
-        {
-          countries.length ?
-          countries.map(country => (
-            <Card key={country.cca3} img={country.flags.png} population={country.population}region={country.region} capital={country.capital} name={country.name.common}></Card>
-          )) : countries.length === 0 ? <PaintIcon /> : <p>Not found</p>
-        }
-      </ul>
+      
+    
+      
+      {/* {countries.data.length && <PaintIcon />}  */}
     </div>
-  );
+  )
 }
 
 export default App;
