@@ -7,8 +7,11 @@ import  {SinglePage} from './components/pages/singlePage';
 import { Search } from './components/search';
 import { Select } from './components/Select';
 import { Routes, Route} from 'react-router-dom'; 
+import { useContext } from 'react';
+import { ThemeContext } from './context/theme';
 
 function App() {
+  const {theme} = useContext(ThemeContext)
   const [select, setSelect] = useState()
   const [value, setValue] = useState();
   const [countries, setCountries] = useState({
@@ -29,23 +32,21 @@ function App() {
         isLoading: false,
         isError: true,
         data: {},
-        
       }))
       
     }else if(select?.length && select !== 'all'){
       fetch(`https://restcountries.com/v3.1/region/${select}`)
-        .then((res) => res.json())
-        .then((data)=> setCountries({
+      .then((res) => res.json())
+      .then((data)=> setCountries({
+      isLoading: false,
+      isError: false,
+      data: data
+      }))
+      .catch((err) => setCountries({
         isLoading: false,
-        isError: false,
-        data: data
-        }))
-        .catch((err) => setCountries({
-          isLoading: false,
-          isError: true,
-          data: {}
-        }))
-        
+        isError: true,
+        data: {}
+      }))
     }
     else {
       fetch("https://restcountries.com/v3.1/all")
@@ -61,18 +62,17 @@ function App() {
         isError: true,
         data: {}
       })})
-      
     }
   }, [value, select])
 
   return (
-    <div className="container-fluid">
+    <div className={`container-fluid ${theme}`}>
 
       <Header />
       <Routes>
         <Route path="/" element={
           <>
-            <div className="searching container-md d-sm-flex justify-content-between align-items-center">
+            <div className={`searching container-md d-sm-flex justify-content-between align-items-center `}>
               <Search setValue={setValue} /> 
               <Select setSelect={setSelect} />
             </div>
